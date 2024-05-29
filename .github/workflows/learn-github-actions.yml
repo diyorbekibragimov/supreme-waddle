@@ -1,6 +1,6 @@
 name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub actions
-on: [push]
+on: [push, issue_comment]
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -14,3 +14,12 @@ jobs:
       - run: npm install -g bats
 
       - run: bats -v
+  issue_commented:
+    name: Issue comment
+    if: ${{ !github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo A comment on issue $NUMBER
+        env:
+          NUMBER: ${{ github.event.issue.number }}
