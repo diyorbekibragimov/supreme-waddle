@@ -14,12 +14,22 @@ jobs:
       - run: npm install -g bats
 
       - run: bats -v
+
   issue_commented:
     name: Issue comment
     if: ${{ !github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo Hello World!
+      - name: Check if comment matches pattern
+        id: check_comment
+        run: |
+          if [[ "${{ github.event.comment.body }}" =~ ^TriagerX\s(.+)$ ]]; then
+            echo "::set-output name=name::${BASH_REMATCH[1]}"
+          fi
+
+      - name: Print message
+        if: steps.check_comment.outputs.name
+        run: |
+          echo "Hello ${{ steps.check_comment.outputs.name }}"
         env:
           NUMBER: ${{ github.event.issue.number }}
