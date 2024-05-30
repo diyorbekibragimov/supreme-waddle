@@ -17,12 +17,17 @@ jobs:
 
   issue_commented:
     name: Issue comment
-    if: ${{ !github.event.issue.pull_request }}
+    if: ${{ !github.event.issue.pull_request && startsWith(github.event.comment.body, 'TriagerX') }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check if comment matches pattern
-        id: check_comment
-        run: |
-          if [[ "${{ github.event.comment.body }}" =~ ^TriagerX\s(.+)$ ]]; then
-            echo "::set-output name=name::${BASH_REMATCH[1]}"
-          fi
+      - name: Commenting on the issue
+        id: comment
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Deployment succeeded! ✅',
+            }); 
