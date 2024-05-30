@@ -10,16 +10,16 @@ jobs:
         id: comment
         uses: actions/github-script@v4
         with:
-          script: |
-            const commentBody = github.event.comment.body;
-            if (commentBody.startswith('TriagerX')) {
-              const name = commentBody.split(' ')[1];
-              github.issues.createComment({
+            script: |
+              const commentBody = context.payload.comment.body;
+              if (commentBody.startsWith('TriagerX')) {
+                const name = commentBody.split(' ')[1];
+                github.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: `Hello ${name}!`,
-              });
-            }
+                });
+              }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
