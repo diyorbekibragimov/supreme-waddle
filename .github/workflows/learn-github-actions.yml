@@ -13,13 +13,13 @@ jobs:
             script: |
               const commentBody = context.payload.comment.body;
               if (commentBody.startsWith('TriagerX')) {
-                const name = commentBody.split(' ')[1];
-                github.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: `Hello ${name}!`,
-                });
+              const name = commentBody.split(' ').slice(1).join(' ');
+              github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `Hello ${name}!`,
+              });
               }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
