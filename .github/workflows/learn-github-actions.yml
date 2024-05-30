@@ -4,7 +4,7 @@ on: [issue_comment]
 jobs:
   issue_commented:
     name: Issue comment
-    if: ${{ !github.event.issue.pull_request && startsWith(github.event.comment.body, 'TriagerX') }}
+    if: ${{ !github.event.issue.pull_request}}
     runs-on: ubuntu-latest
     steps:
       - name: Commenting on the issue
@@ -12,12 +12,15 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const name = github.event.comment.body.split(' ')[1];
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Hello ${name}!`,
-            }); 
+            const commentBody = github.event.comment.body;
+            if (commentBody.startswith('TriagerX')) {
+              const name = commentBody.split(' ')[1];
+              github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `Hello ${name}!`,
+              });
+            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
