@@ -15,10 +15,10 @@ jobs:
               if (commentBody.startsWith('TriagerX')) {
                 const name = commentBody.split(' ')[1];
                 github.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `Hello ${name}!`,
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `Hello ${name}!`,
                 });
               }
         env:
