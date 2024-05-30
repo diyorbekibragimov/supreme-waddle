@@ -1,6 +1,6 @@
 name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub actions
-on: [issue_comment, pull_request_target]
+on: [issue_comment]
 jobs:
   issue_commented:
     name: Issue comment
@@ -12,11 +12,12 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
+            const name = github.event.comment.body.split(' ')[1];
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Deployment succeeded! ✅',
+              body: `Hello ${name}!`,
             }); 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
